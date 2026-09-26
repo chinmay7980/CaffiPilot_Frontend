@@ -1,0 +1,100 @@
+/* ============================================================
+   TYPEWRITER HEADLINE
+   Zero layout-shift character-by-character headline animator
+   ============================================================ */
+
+.headline {
+  position: relative;
+  font-size: clamp(2.75rem, 4.4vw, 4.25rem);
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+  color: #ffffff;
+  margin-bottom: var(--space-lg);
+}
+
+.headlineAccent {
+  color: var(--color-accent);
+}
+
+/* Sizer occupies the full 2-line layout at all times, preventing ANY layout shift */
+.sizer {
+  visibility: hidden;
+  pointer-events: none;
+  display: block;
+  user-select: none;
+}
+
+/* Animated layer overlays the exact sizer bounding box */
+.animated {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
+}
+
+/* Subtle, thin editorial blinking cursor */
+.cursor {
+  display: inline-block;
+  width: 2.5px;
+  height: 0.88em;
+  margin-left: 2px;
+  vertical-align: -0.06em;
+  background-color: var(--color-accent);
+  border-radius: 1px;
+  animation: cursorBlink 0.85s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* Screen reader only utility */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .headline {
+    font-size: clamp(2rem, 5vw, 2.75rem);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .sizer {
+    visibility: visible;
+  }
+
+  .animated {
+    display: none !important;
+  }
+
+  .cursor {
+    display: none !important;
+    animation: none !important;
+  }
+}

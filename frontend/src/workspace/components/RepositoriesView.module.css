@@ -1,0 +1,169 @@
+/* ============================================================
+   REPOSITORIES VIEW
+   ============================================================ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  max-width: 840px;
+  animation: viewFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes viewFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.headerArea {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+}
+
+.titleArea {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.title {
+  font-size: var(--text-headline-md);
+  font-weight: var(--weight-semibold);
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+}
+
+.subtitle {
+  font-size: var(--text-body-md);
+  color: var(--color-text-secondary);
+}
+
+.searchInput {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+  color: var(--color-text-primary);
+  width: 260px;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.searchInput:focus {
+  border-color: var(--color-accent);
+}
+
+.searchInput::placeholder {
+  color: var(--color-text-muted);
+}
+
+.repoList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface-1);
+  overflow: hidden;
+}
+
+.repoRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.repoRow:last-child {
+  border-bottom: none;
+}
+
+.repoRow:hover {
+  background-color: var(--color-surface-2);
+}
+
+.repoRow.selected {
+  background-color: rgba(229, 139, 67, 0.05);
+  border-left: 3px solid var(--color-accent);
+}
+
+.repoLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.repoIcon {
+  color: var(--color-accent);
+  font-size: 14px;
+}
+
+.repoMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.repoName {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-md);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+}
+
+.repoDetails {
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+  color: var(--color-text-muted);
+}
+
+.repoRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.actionButtons {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.emptyState {
+  padding: var(--space-2xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-sm);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface-1);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.emptyTitle {
+  font-size: var(--text-body-md);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+}
+
+.emptySubtitle {
+  font-size: var(--text-code-sm);
+  color: var(--color-text-muted);
+}
+

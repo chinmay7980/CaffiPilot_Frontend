@@ -1,0 +1,75 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0.1875rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: var(--radius-full);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+/* --- Dot indicator --------------------------------------- */
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* --- Variants -------------------------------------------- */
+.verified {
+  color: var(--color-success);
+  background-color: var(--color-success-dim);
+  border-color: var(--color-success-border);
+}
+.verified .dot {
+  background-color: var(--color-success);
+}
+
+.running {
+  color: var(--color-accent);
+  background-color: var(--color-accent-dim);
+  border-color: var(--color-accent-border);
+}
+.running .dot {
+  background-color: var(--color-accent);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.failed {
+  color: var(--color-error);
+  background-color: var(--color-error-dim);
+  border-color: var(--color-error-border);
+}
+.failed .dot {
+  background-color: var(--color-error);
+}
+
+.info {
+  color: var(--color-secondary);
+  background-color: var(--color-secondary-dim);
+  border-color: var(--color-secondary-border);
+}
+.info .dot {
+  background-color: var(--color-secondary);
+}
+
+.neutral {
+  color: var(--color-text-secondary);
+  background-color: var(--color-surface-2);
+  border-color: var(--color-border);
+}
+.neutral .dot {
+  background-color: var(--color-text-muted);
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

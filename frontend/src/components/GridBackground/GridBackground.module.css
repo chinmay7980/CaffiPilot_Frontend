@@ -1,0 +1,215 @@
+/* ============================================================
+   GRID BACKGROUND COMPONENT
+   ============================================================
+   Subtle 40px × 40px technical grid texture with radial edge
+   fade and optional ambient glow. Pure CSS implementation
+   using CaffiPilot design tokens.
+   ============================================================ */
+
+.gridBackground {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-canvas);
+}
+
+/* --- 40px × 40px Grid Layer ------------------------------ */
+
+.gridLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-size: 40px 40px;
+  background-image:
+    radial-gradient(circle, rgba(241, 245, 249, 0.10) 1px, transparent 1px),
+    linear-gradient(to right, rgba(241, 245, 249, 0.048) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(241, 245, 249, 0.048) 1px, transparent 1px);
+}
+
+/* Default centered radial fade */
+.default .gridLayer {
+  mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    black 20%,
+    rgba(0, 0, 0, 0.6) 48%,
+    rgba(0, 0, 0, 0.15) 72%,
+    transparent 88%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    black 20%,
+    rgba(0, 0, 0, 0.6) 48%,
+    rgba(0, 0, 0, 0.15) 72%,
+    transparent 88%
+  );
+}
+
+/* Hero variant: grid presence focused around center and right-side product preview, quieter on left */
+.hero .gridLayer {
+  mask-image: radial-gradient(
+    ellipse 78% 72% at 70% 50%,
+    rgba(0, 0, 0, 0.98) 0%,
+    rgba(0, 0, 0, 0.68) 40%,
+    rgba(0, 0, 0, 0.28) 70%,
+    transparent 92%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 78% 72% at 70% 50%,
+    rgba(0, 0, 0, 0.98) 0%,
+    rgba(0, 0, 0, 0.68) 40%,
+    rgba(0, 0, 0, 0.28) 70%,
+    transparent 92%
+  );
+}
+
+/* Section variant: balanced, centered presentation with transparent base */
+.section {
+  background-color: transparent;
+}
+
+.section .gridLayer {
+  mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    black 16%,
+    rgba(0, 0, 0, 0.5) 45%,
+    rgba(0, 0, 0, 0.12) 70%,
+    transparent 85%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    black 16%,
+    rgba(0, 0, 0, 0.5) 45%,
+    rgba(0, 0, 0, 0.12) 70%,
+    transparent 85%
+  );
+}
+
+.section .radialFadeOverlay {
+  display: none;
+}
+
+/* --- Intensity Modifiers --------------------------------- */
+
+.defaultIntensity .gridLayer {
+  opacity: 1;
+}
+
+.subtleIntensity .gridLayer {
+  opacity: 0.52;
+}
+
+/* --- Radial Fade Layer (Edge dissolving into canvas) ------ */
+
+.radialFadeOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 90% 85% at 50% 50%,
+    transparent 25%,
+    rgba(13, 15, 18, 0.4) 62%,
+    var(--color-canvas) 96%
+  );
+}
+
+.hero .radialFadeOverlay {
+  background: radial-gradient(
+    ellipse 95% 85% at 65% 50%,
+    transparent 20%,
+    rgba(13, 15, 18, 0.35) 60%,
+    var(--color-canvas) 95%
+  );
+}
+
+/* --- Ambient Amber Glow Support (Non-neon, static) ------- */
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(64px);
+}
+
+.glowRight {
+  top: 50%;
+  right: 6%;
+  transform: translateY(-50%);
+  width: 860px;
+  height: 600px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(229, 139, 67, 0.12) 0%,
+    rgba(229, 139, 67, 0.04) 42%,
+    rgba(229, 139, 67, 0.01) 62%,
+    transparent 78%
+  );
+}
+
+.glowCenter {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 620px;
+  height: 440px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(229, 139, 67, 0.038) 0%,
+    rgba(229, 139, 67, 0.012) 42%,
+    transparent 70%
+  );
+}
+
+/* --- Responsive Adjustments ------------------------------ */
+
+@media (max-width: 1024px) {
+  .hero .gridLayer {
+    mask-image: radial-gradient(
+      ellipse 90% 80% at 50% 55%,
+      black 15%,
+      rgba(0, 0, 0, 0.6) 45%,
+      rgba(0, 0, 0, 0.15) 70%,
+      transparent 88%
+    );
+    -webkit-mask-image: radial-gradient(
+      ellipse 90% 80% at 50% 55%,
+      black 15%,
+      rgba(0, 0, 0, 0.6) 45%,
+      rgba(0, 0, 0, 0.15) 70%,
+      transparent 88%
+    );
+    opacity: 0.8;
+  }
+
+  .glowRight {
+    top: 65%;
+    right: 50%;
+    transform: translate(50%, -50%);
+    width: 480px;
+    height: 380px;
+    opacity: 0.65;
+  }
+}
+
+@media (max-width: 768px) {
+  .gridLayer {
+    opacity: 0.6;
+  }
+
+  .subtleIntensity .gridLayer {
+    opacity: 0.38;
+  }
+
+  .glowRight {
+    width: 320px;
+    height: 260px;
+    opacity: 0.5;
+  }
+
+  .glowCenter {
+    width: 340px;
+    height: 260px;
+    opacity: 0.5;
+  }
+}

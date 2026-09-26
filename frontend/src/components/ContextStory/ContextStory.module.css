@@ -1,0 +1,847 @@
+/* ============================================================
+   CONTEXT INTELLIGENCE — "CONTEXT IS THE ADVANTAGE"
+   Technical Context Narrowing Pipeline
+   ============================================================ */
+
+.sectionWrap {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+/* Subtle Ambient Glow behind Pipeline */
+.ambientAtmosphereGlow {
+  position: absolute;
+  top: 20%;
+  left: 15%;
+  right: 15%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(229, 139, 67, 0.14) 0%,
+    rgba(229, 139, 67, 0.03) 50%,
+    transparent 75%
+  );
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contextGridPattern {
+  position: absolute;
+  inset: -32px -48px;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 70% at center, black 35%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at center, black 35%, transparent 80%);
+  opacity: 0.6;
+}
+
+/* ============================================================
+   1. SECTION INTRO BLOCK
+   ============================================================ */
+
+.introBlock {
+  width: 100%;
+  max-width: 880px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-xs);
+}
+
+.eyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  box-shadow: 0 0 8px rgba(229, 139, 67, 0.6);
+}
+
+.heading {
+  font-size: clamp(2.25rem, 3.6vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: var(--space-xs);
+}
+
+.headingAccent {
+  color: var(--color-accent);
+}
+
+.description {
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  color: #94a3b8;
+  max-width: 640px;
+  margin: 0;
+}
+
+/* ============================================================
+   2. PIPELINE CONTAINER & COMMON CARD STYLES
+   ============================================================ */
+
+.pipelineContainer {
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.pipelineCard {
+  width: 100%;
+  border-radius: 10px;
+  background-color: #0b0e14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px 20px;
+  position: relative;
+  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.pipelineCard:focus-visible {
+  border-color: var(--color-accent);
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.stageActive {
+  border-color: rgba(229, 139, 67, 0.35);
+  background-color: #0e121a;
+  box-shadow:
+    0 16px 40px -10px rgba(0, 0, 0, 0.7),
+    0 0 24px -4px rgba(229, 139, 67, 0.12);
+}
+
+/* Card Header */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cardHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nodeIcon {
+  color: var(--color-accent);
+  font-size: 13px;
+}
+
+.nodeTitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f1f5f9;
+}
+
+.repoName {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.branchBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.scopeBadge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* Data Reduction Volume Meter */
+.volumeMeterRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.volumeLabel {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.volumeTrack {
+  flex: 1;
+  max-width: 280px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.volumeFill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 400ms ease;
+}
+
+.volumeFull {
+  width: 100%;
+  background: linear-gradient(90deg, #38bdf8 0%, #818cf8 100%);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+}
+
+.volumeNarrow {
+  width: 32%;
+  background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+}
+
+.volumeFocused {
+  width: 14%;
+  background: linear-gradient(90deg, var(--color-accent) 0%, #fbbf24 100%);
+  box-shadow: 0 0 8px rgba(229, 139, 67, 0.6);
+}
+
+/* ============================================================
+   3. STAGE 1: REPOSITORY TREE
+   ============================================================ */
+
+.repoCard {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.repoTreeBox {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+
+.treeRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  padding: 1.5px 0;
+  transition: color 200ms ease;
+}
+
+.fileIcon {
+  font-size: 11px;
+}
+
+.fileName {
+  color: #94a3b8;
+}
+
+.treeRowPrimary {
+  color: #ffffff;
+}
+
+.treeRowPrimary .fileName {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.treeRowSecondary .fileName {
+  color: #cbd5e1;
+}
+
+.fileTag {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+
+.tagPrimary {
+  color: var(--color-accent);
+  background: rgba(229, 139, 67, 0.16);
+  border: 1px solid rgba(229, 139, 67, 0.3);
+}
+
+.tagSecondary {
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ============================================================
+   CONNECTOR PIPES WITH TRAVELING SIGNAL
+   ============================================================ */
+
+.connectorPipe {
+  position: relative;
+  width: 100%;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.verticalStem {
+  width: 2px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 1px;
+}
+
+.signalPulse {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow:
+    0 0 10px 2px var(--color-accent),
+    0 0 4px #ffffff;
+  top: 10%;
+  transition: top 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.signalMoving {
+  top: 80%;
+}
+
+/* Split Trident (from single stem into 3 search branches) */
+.splitTrident {
+  position: absolute;
+  bottom: 0;
+  width: 80%;
+  height: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  justify-content: space-between;
+}
+
+.tridentArmLeft,
+.tridentArmCenter,
+.tridentArmRight {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.tridentArmCenter {
+  margin: 0 auto;
+}
+
+/* Converge Trident (from 3 search branches into single stem) */
+.convergeTrident {
+  position: absolute;
+  top: 0;
+  width: 80%;
+  height: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ============================================================
+   4. STAGE 2: THREE SEARCH LAYERS (PROCESSING STAGES)
+   ============================================================ */
+
+.searchRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+}
+
+.searchModule {
+  background-color: #0b0e14;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 250ms ease;
+  cursor: pointer;
+  outline: none;
+}
+
+.searchModule:hover,
+.searchModuleHovered {
+  border-color: rgba(229, 139, 67, 0.35);
+  background-color: #121620;
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+}
+
+.searchModule:focus-visible {
+  outline: 2px solid var(--color-accent);
+}
+
+.searchModuleHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.searchModuleDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  box-shadow: 0 0 6px rgba(229, 139, 67, 0.6);
+}
+
+.searchModuleTitle {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f1f5f9;
+}
+
+.searchModuleSubtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.searchModuleDesc {
+  font-size: 11.5px;
+  line-height: 1.4;
+  color: #94a3b8;
+  margin: 0;
+  flex: 1;
+}
+
+.searchModuleFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.searchModuleMetric {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: #64748b;
+}
+
+.searchModuleCandidates {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #10b981;
+}
+
+/* ============================================================
+   5. STAGE 3: RELEVANT FILES
+   ============================================================ */
+
+.relevantCard {
+  background-color: #0b0e14;
+}
+
+.checkIcon {
+  color: #10b981;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.selectedCountBadge {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 4px;
+  padding: 1px 8px;
+}
+
+.relevantList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.relevantItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.relevantCheck {
+  color: #10b981;
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.relevantPath {
+  color: #f1f5f9;
+  flex: 1;
+}
+
+.relevantScore {
+  font-size: 10px;
+  color: #64748b;
+}
+
+/* ============================================================
+   6. STAGE 4: FOCUSED CONTEXT (VISUAL PAYOFF)
+   ============================================================ */
+
+.focusedCard {
+  border: 1px solid rgba(229, 139, 67, 0.35);
+  background-color: #0d1017;
+  box-shadow:
+    0 20px 48px -12px rgba(0, 0, 0, 0.8),
+    0 0 28px -4px rgba(229, 139, 67, 0.14);
+}
+
+.focusedCardActive {
+  border-color: var(--color-accent);
+  box-shadow:
+    0 24px 54px -12px rgba(0, 0, 0, 0.85),
+    0 0 36px -2px rgba(229, 139, 67, 0.24);
+}
+
+.amberSparkIcon {
+  color: var(--color-accent);
+  font-size: 13px;
+}
+
+.focusedTitle {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+}
+
+.contextWindowBadge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: rgba(229, 139, 67, 0.12);
+  border: 1px solid rgba(229, 139, 67, 0.3);
+  padding: 1px 6px;
+  border-radius: 3px;
+  margin-left: 6px;
+}
+
+.readyPill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: #10b981;
+}
+
+.codeSnippetBox {
+  background: #06080d;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.codeSnippetHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+.codeSnippetFile {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.codeSnippetMeta {
+  color: #64748b;
+}
+
+.codeContent {
+  margin: 0;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #cbd5e1;
+  overflow-x: auto;
+}
+
+.codeKeyword {
+  color: #f472b6;
+}
+
+.codeFn {
+  color: #60a5fa;
+}
+
+.codeType {
+  color: #34d399;
+}
+
+.codeMuted {
+  color: #475569;
+}
+
+.codeAccent {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* Key Editorial Statement */
+.editorialCallout {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(229, 139, 67, 0.06);
+  border: 1px solid rgba(229, 139, 67, 0.2);
+  border-radius: 6px;
+}
+
+.editorialQuoteMark {
+  font-family: var(--font-sans);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-accent);
+  line-height: 1;
+}
+
+.editorialQuote {
+  font-family: var(--font-sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+/* ============================================================
+   7. STAGE 5: READY FOR AGENT
+   ============================================================ */
+
+.agentCard {
+  background-color: #0b0e14;
+  border-color: rgba(16, 185, 129, 0.25);
+  padding: 12px 18px;
+}
+
+.agentCardInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.agentStatusPill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.agentStatusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.agentStatusTitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #10b981;
+}
+
+.agentTaskInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.taskIssue {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: rgba(229, 139, 67, 0.12);
+  border: 1px solid rgba(229, 139, 67, 0.25);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.taskTitle {
+  color: #f1f5f9;
+  font-weight: 500;
+}
+
+.agentAssembledBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #6ee7b7;
+}
+
+.agentCheckmark {
+  font-weight: 700;
+}
+
+/* ============================================================
+   RESPONSIVE (1024, 768, 600 and below)
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .pipelineContainer {
+    max-width: 100%;
+  }
+
+  .searchRow {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .searchRow {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .splitTrident,
+  .convergeTrident {
+    display: none;
+  }
+
+  .volumeMeterRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .volumeTrack {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .agentCardInner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .editorialCallout {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .signalPulse {
+    display: none;
+  }
+
+  .eyebrowDot,
+  .agentStatusDot {
+    box-shadow: none;
+  }
+
+  .pipelineCard,
+  .searchModule {
+    transition: none;
+  }
+}

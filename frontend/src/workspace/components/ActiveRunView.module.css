@@ -1,0 +1,1224 @@
+/* ============================================================
+   ACTIVE RUN VIEW — PHASE 5E DIFF + TESTS + VERIFICATION
+   ============================================================ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  animation: viewFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  background-color: var(--color-canvas);
+}
+
+@keyframes viewFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Header */
+.runHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-xl);
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-surface-1);
+  gap: var(--space-md);
+  flex-shrink: 0;
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.taskTitle {
+  font-size: var(--text-headline-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.repoMeta {
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+  color: var(--color-text-muted);
+}
+
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* Phase Flow Bar */
+.phaseBar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 4px 10px;
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.phaseStep {
+  color: var(--color-text-muted);
+  transition: color var(--duration-fast);
+}
+
+.phaseStep.active {
+  color: var(--color-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.phaseStep.recovery {
+  color: #f59e0b;
+  font-weight: var(--weight-semibold);
+  animation: pulseAmber 1.2s infinite ease-in-out;
+}
+
+@keyframes pulseAmber {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.phaseStep.verified {
+  color: var(--color-success);
+  font-weight: var(--weight-semibold);
+}
+
+.phaseArrow {
+  color: var(--color-text-muted);
+  font-size: 10px;
+}
+
+/* Tab Navigation */
+.tabNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface-1);
+  border-bottom: 1px solid var(--color-border);
+  padding: 0 var(--space-xl);
+  flex-shrink: 0;
+}
+
+.tabButtonsGroup {
+  display: flex;
+}
+
+.tabButton {
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+  color: var(--color-text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tabButton:hover {
+  color: var(--color-text-primary);
+}
+
+.tabButton.active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+  font-weight: var(--weight-medium);
+}
+
+.tabPill {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: var(--radius-full);
+  background-color: rgba(229, 139, 67, 0.15);
+  color: var(--color-accent);
+}
+
+.tabPillSuccess {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: var(--color-success);
+}
+
+.tabPillDanger {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+}
+
+/* Completion Banner when Verified */
+.completionBanner {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.12) 0%, rgba(229, 139, 67, 0.08) 100%);
+  border-bottom: 1px solid rgba(34, 197, 94, 0.3);
+  padding: var(--space-sm) var(--space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  animation: viewFadeIn 0.3s ease forwards;
+}
+
+.completionLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+}
+
+.completionBadge {
+  background-color: var(--color-success);
+  color: #000;
+  font-weight: var(--weight-bold);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  letter-spacing: 0.05em;
+}
+
+.completionText {
+  color: var(--color-text-primary);
+}
+
+.completionActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Workspace Middle Body */
+.runBody {
+  display: flex;
+  flex: 1;
+  min-height: 320px;
+  background-color: var(--color-canvas);
+  overflow: hidden;
+}
+
+.tabContent {
+  flex: 1;
+  padding: var(--space-lg) var(--space-xl);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Agent State Right Panel */
+.agentStatePanel {
+  width: 260px;
+  flex-shrink: 0;
+  background-color: var(--color-surface-1);
+  border-left: 1px solid var(--color-border);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+  overflow-y: auto;
+}
+
+.stateSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.statePanelTitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 4px;
+}
+
+.stateEntry {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.stateLabel {
+  color: var(--color-text-muted);
+}
+
+.stateValue {
+  color: var(--color-text-secondary);
+  font-weight: var(--weight-medium);
+}
+
+.stateValueHighlight {
+  color: var(--color-accent);
+  font-weight: var(--weight-semibold);
+}
+
+.currentActionBox {
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.actionLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.actionText {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+/* Context Panel */
+.contextList {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.contextCard {
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.contextPath {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-primary);
+  word-break: break-all;
+}
+
+.contextRole {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--color-accent);
+}
+
+/* Terminal Bottom Panel */
+.terminalPanel {
+  background-color: rgba(10, 12, 15, 0.98);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-xl);
+  min-height: 130px;
+  max-height: 200px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.terminalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-xs);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+.terminalTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+
+.terminalStatusTag {
+  color: var(--color-success);
+  font-family: var(--font-mono);
+}
+
+.terminalBody {
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: var(--space-xs);
+}
+
+.terminalLine {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.terminalLine.cmd {
+  color: #38bdf8;
+  font-weight: var(--weight-medium);
+}
+
+.terminalLine.out {
+  color: #94a3b8;
+}
+
+.terminalLine.err {
+  color: #f87171;
+  background-color: rgba(248, 113, 113, 0.08);
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+.terminalLine.ok {
+  color: #4ade80;
+}
+
+/* Activity Tab List */
+.activityContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  position: relative;
+  overflow-y: auto;
+}
+
+.activityRow {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-sm) var(--space-md);
+  transition: all var(--duration-fast);
+  animation: eventAppear 0.25s ease-out forwards;
+}
+
+@keyframes eventAppear {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activityRow:hover {
+  border-color: rgba(229, 139, 67, 0.3);
+  background-color: var(--color-surface-2);
+}
+
+.activityRowFailure {
+  border-color: rgba(239, 68, 68, 0.4);
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.activityRowFailure:hover {
+  border-color: rgba(239, 68, 68, 0.6);
+  background-color: rgba(239, 68, 68, 0.08);
+}
+
+.activityMain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.activityLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+}
+
+.activityIconCheck {
+  color: var(--color-success);
+  font-weight: var(--weight-bold);
+}
+
+.activityIconArrow {
+  color: var(--color-accent);
+  font-weight: var(--weight-bold);
+}
+
+.activityIconFail {
+  color: var(--color-danger);
+  font-weight: var(--weight-bold);
+}
+
+.activityTime {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.activityText {
+  color: var(--color-text-primary);
+  font-size: var(--text-body-sm);
+}
+
+.activityDetailsToggle {
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+.activityDetailsToggle:hover {
+  color: var(--color-accent);
+}
+
+.activityDetailsBox {
+  margin-top: 4px;
+  padding: 6px var(--space-sm);
+  background-color: var(--color-canvas);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  line-height: 1.4;
+}
+
+/* ============================================================
+   DIFF TAB — SECTION 3 & 4
+   ============================================================ */
+.diffContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  height: 100%;
+}
+
+.diffSummaryBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+  flex-shrink: 0;
+}
+
+.diffStat {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.statAdd { color: var(--color-success); }
+.statDel { color: var(--color-danger); }
+
+/* Two-column Diff Workspace Grid */
+.diffWorkspaceGrid {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--space-md);
+  flex: 1;
+  min-height: 0;
+}
+
+.diffFileList {
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.diffFileListHeader {
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.diffFileItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  background: none;
+  border-left: 2px solid transparent;
+  width: 100%;
+  text-align: left;
+  transition: all var(--duration-fast);
+}
+
+.diffFileItem:hover {
+  background-color: var(--color-surface-2);
+}
+
+.diffFileItem.active {
+  background-color: var(--color-surface-2);
+  border-left-color: var(--color-accent);
+}
+
+.diffFileLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.statusIconM {
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  font-size: 11px;
+}
+
+.statusIconA {
+  color: var(--color-success);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  font-size: 11px;
+}
+
+.diffFilePath {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.diffFileStats {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+/* Diff Viewer Center */
+.diffViewer {
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.diffViewerHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm) var(--space-md);
+  background-color: var(--color-surface-2);
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.diffViewerTitle {
+  color: var(--color-text-primary);
+  font-weight: var(--weight-medium);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.diffViewerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.copyButton {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--duration-fast);
+}
+
+.copyButton:hover {
+  color: var(--color-text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.diffContentScroll {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.hunkBlock {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hunkHeader {
+  background-color: rgba(56, 189, 248, 0.08);
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 12px;
+  border-top: 1px solid rgba(56, 189, 248, 0.15);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  user-select: none;
+}
+
+.diffLinesTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.diffLineRow {
+  display: flex;
+}
+
+.lineNum {
+  width: 44px;
+  text-align: right;
+  padding-right: 8px;
+  color: var(--color-text-muted);
+  user-select: none;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.lineText {
+  flex: 1;
+  padding-left: 8px;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.lineAdd {
+  background-color: rgba(34, 197, 94, 0.12);
+  color: #4ade80;
+}
+
+.lineAdd .lineNum {
+  color: #4ade80;
+  opacity: 0.8;
+}
+
+.lineDel {
+  background-color: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+}
+
+.lineDel .lineNum {
+  color: #f87171;
+  opacity: 0.8;
+}
+
+.lineNormal {
+  color: var(--color-text-secondary);
+}
+
+/* ============================================================
+   TESTS TAB — SECTION 6, 7 & 8
+   ============================================================ */
+.testsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.testsSummaryBar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.testMetricCard {
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-sm) var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.testMetricLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+}
+
+.testMetricValue {
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.testSuitesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.testSuiteCard {
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.testSuiteHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  cursor: pointer;
+  user-select: none;
+}
+
+.suiteInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.suiteIconPassed {
+  color: var(--color-success);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+}
+
+.suiteIconFailed {
+  color: var(--color-danger);
+  font-size: 14px;
+  font-weight: var(--weight-bold);
+}
+
+.suiteIconRunning {
+  color: var(--color-accent);
+  font-size: 14px;
+}
+
+.suiteIconQueued {
+  color: var(--color-text-muted);
+  font-size: 14px;
+}
+
+.suiteName {
+  font-size: var(--text-body-md);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+}
+
+.suiteCommand {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.suiteRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.suiteBadge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+}
+
+.suiteBadgePassed {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: var(--color-success);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.suiteBadgeFailed {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.suiteBadgeRunning {
+  background-color: rgba(229, 139, 67, 0.15);
+  color: var(--color-accent);
+  border: 1px solid rgba(229, 139, 67, 0.3);
+}
+
+.suiteBadgeQueued {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+}
+
+/* Individual Test Cases in Suite */
+.suiteBody {
+  border-top: 1px solid var(--color-border);
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+.casesList {
+  display: flex;
+  flex-direction: column;
+}
+
+.caseRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-xs) var(--space-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.caseRowFailed {
+  background-color: rgba(239, 68, 68, 0.05);
+}
+
+.caseLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-text-secondary);
+}
+
+.casePassedIcon { color: var(--color-success); }
+.caseFailedIcon { color: var(--color-danger); }
+.caseQueuedIcon { color: var(--color-text-muted); }
+
+/* Failure Details Box (Section 8) */
+.failureBox {
+  margin: var(--space-xs) var(--space-md) var(--space-sm) var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background-color: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.failureHeader {
+  color: var(--color-danger);
+  font-weight: var(--weight-bold);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.failureGrid {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 2px;
+  color: var(--color-text-secondary);
+}
+
+.failureKey {
+  color: var(--color-text-muted);
+}
+
+.failureValueExpected {
+  color: var(--color-success);
+}
+
+.failureValueReceived {
+  color: var(--color-danger);
+}
+
+.suiteOutput {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-sm) var(--space-md);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   VERIFICATION TAB — SECTION 9, 10, 11 & 12
+   ============================================================ */
+.verificationContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  max-width: 840px;
+}
+
+.verifiedHeroCard {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.08) 0%, rgba(229, 139, 67, 0.05) 100%);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.verifiedHeadline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-headline-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.verifiedBadgeBig {
+  background-color: var(--color-success);
+  color: #000;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: var(--weight-bold);
+  padding: 3px 10px;
+  border-radius: var(--radius);
+}
+
+.runningBadgeBig {
+  background-color: rgba(229, 139, 67, 0.15);
+  color: var(--color-accent);
+  border: 1px solid rgba(229, 139, 67, 0.3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--radius);
+}
+
+.verifiedDesc {
+  color: var(--color-text-secondary);
+  font-size: var(--text-body-md);
+  line-height: 1.5;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.metricCard {
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.metricNum {
+  font-size: var(--text-headline-sm);
+  font-weight: var(--weight-bold);
+  font-family: var(--font-mono);
+  color: var(--color-accent);
+}
+
+.metricLabel {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.verificationChecklist {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.checkRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  background-color: var(--color-surface-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  transition: all var(--duration-fast);
+}
+
+.checkRow:hover {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.checkLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.checkIconPassed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(34, 197, 94, 0.15);
+  color: var(--color-success);
+  font-weight: var(--weight-bold);
+  font-size: 12px;
+}
+
+.checkIconFailed {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(239, 68, 68, 0.15);
+  color: var(--color-danger);
+  font-weight: var(--weight-bold);
+  font-size: 12px;
+}
+
+.checkIconRunning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(229, 139, 67, 0.15);
+  color: var(--color-accent);
+  font-weight: var(--weight-bold);
+  font-size: 12px;
+  animation: pulseAmber 1s infinite ease-in-out;
+}
+
+.checkIconPending {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.checkTitle {
+  font-size: var(--text-body-md);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-primary);
+}
+
+.checkSubtitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.finalActionsRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN (1440, 1280, 1024, 768, 600)
+   ============================================================ */
+@media (max-width: 1024px) {
+  .testsSummaryBar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .runBody {
+    flex-direction: column;
+  }
+  .agentStatePanel {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+  }
+  .diffWorkspaceGrid {
+    grid-template-columns: 1fr;
+  }
+  .metricsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .runHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .tabNav {
+    padding: 0 var(--space-md);
+  }
+  .testsSummaryBar {
+    grid-template-columns: 1fr;
+  }
+  .metricsGrid {
+    grid-template-columns: 1fr;
+  }
+  .finalActionsRow {
+    flex-direction: column;
+    width: 100%;
+  }
+  .finalActionsRow button {
+    width: 100%;
+    justify-content: center;
+  }
+}

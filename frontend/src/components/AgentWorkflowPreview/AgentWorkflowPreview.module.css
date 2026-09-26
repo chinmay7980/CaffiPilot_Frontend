@@ -1,0 +1,1457 @@
+/* ============================================================
+   AGENT WORKFLOW PREVIEW — "WATCH CAFFIPILOT WORK"
+   Visual Workflow Architecture & Contextual Callouts with Connectors
+   ============================================================ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2.25rem;
+  width: 100%;
+  position: relative;
+}
+
+/* ============================================================
+   1. SECTION INTRO & AGENT READY INDICATOR
+   ============================================================ */
+
+.headerBlock {
+  width: 100%;
+  max-width: 1120px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.introWrap {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  max-width: 680px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-xs);
+}
+
+.eyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  box-shadow: 0 0 8px rgba(229, 139, 67, 0.6);
+}
+
+.heading {
+  font-size: clamp(2.25rem, 3.6vw, 3.25rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  margin-bottom: var(--space-xs);
+}
+
+.headingAccent {
+  color: var(--color-accent);
+}
+
+.subtitle {
+  font-size: 1.0625rem;
+  line-height: 1.55;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* Agent Ready Badge */
+.agentReadyBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  text-align: right;
+  padding-top: 4px;
+}
+
+.agentReadyPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: 9999px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.agentReadyPulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.agentReadyTitle {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #10b981;
+}
+
+.agentReadySub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #64748b;
+  max-width: 240px;
+  line-height: 1.4;
+}
+
+/* ============================================================
+   2. FIVE-STEP VISUAL WORKFLOW (MAJOR VISUAL ELEMENT)
+   ============================================================ */
+
+.stepperWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1180px;
+  margin: 0.5rem auto 1.5rem;
+}
+
+/* Thin horizontal engineering connector track centered on the 60px nodes */
+.timelineRail {
+  position: absolute;
+  top: 60px; /* Exactly at the vertical center of the 60px circular nodes */
+  left: 10%;
+  right: 10%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 1px;
+  z-index: 1;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.timelineProgress {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, var(--color-accent) 100%);
+  border-radius: 1px;
+  box-shadow: 0 0 12px rgba(229, 139, 67, 0.45);
+  transition: width 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timelineSignal {
+  position: absolute;
+  top: -3px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow:
+    0 0 12px 2px var(--color-accent),
+    0 0 4px #ffffff;
+  transform: translateX(-50%);
+  transition: left 400ms cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+/* 5 Steps Grid with equal spacing */
+.stepperGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  position: relative;
+  z-index: 2;
+  gap: 16px;
+  width: 100%;
+}
+
+.stepButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0 4px;
+  outline: none;
+  text-align: center;
+  transition: opacity 200ms ease;
+}
+
+.stepButton:focus-visible .stepNode {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
+/* 1. Stage Number ABOVE the node */
+.stepNum {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 14px; /* 12–16px vertical gap to node */
+  transition: color 250ms ease;
+  line-height: 16px;
+}
+
+.stepActive .stepNum {
+  color: var(--color-accent);
+}
+
+.stepComplete .stepNum {
+  color: #10b981;
+}
+
+/* 2. Prominent Circular Node (56–64px diameter) sitting on connector */
+.stepNode {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0b0e14;
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  margin-bottom: 20px; /* 18–22px vertical gap to title */
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+}
+
+.stepNodeInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #64748b;
+  transition: color 250ms ease;
+}
+
+.nodeSvg {
+  display: block;
+}
+
+/* Active Step Styling */
+.stepActive .stepNode {
+  border-color: var(--color-accent);
+  background-color: #18130e;
+  box-shadow:
+    0 0 24px rgba(229, 139, 67, 0.38),
+    inset 0 0 12px rgba(229, 139, 67, 0.18);
+}
+
+.stepActive .stepNodeInner {
+  color: var(--color-accent);
+}
+
+.stepPulseRing {
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid rgba(229, 139, 67, 0.4);
+  animation: pulseStepRing 2.2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  pointer-events: none;
+}
+
+@keyframes pulseStepRing {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.28);
+    opacity: 0;
+  }
+}
+
+/* Completed Step Styling */
+.stepComplete .stepNode {
+  border-color: #10b981;
+  background-color: #071711;
+}
+
+.stepComplete .stepNodeInner {
+  color: #10b981;
+}
+
+/* 3. Title & 4. Description below the node */
+.stepInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* 8–10px vertical gap between title and description */
+  align-items: center;
+  text-align: center;
+}
+
+.stepTitle {
+  font-family: var(--font-sans);
+  font-size: 16px; /* 15–17px */
+  font-weight: 600; /* medium / semibold */
+  letter-spacing: -0.01em;
+  color: #64748b;
+  transition: color 250ms ease;
+  white-space: nowrap;
+  line-height: 1.25;
+}
+
+.stepActive .stepTitle {
+  color: #ffffff;
+}
+
+.stepComplete .stepTitle {
+  color: #cbd5e1;
+}
+
+.stepDesc {
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #475569;
+  max-width: 180px; /* 170–190px, comfortable two-line wrapping */
+  transition: color 250ms ease;
+  text-align: center;
+}
+
+.stepActive .stepDesc {
+  color: #94a3b8;
+}
+
+/* ============================================================
+   3. LARGE PRODUCT PREVIEW & CONTEXTUAL CALLOUTS LAYOUT
+   ============================================================ */
+
+.previewAreaWrap {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0.5rem auto 0;
+  display: grid;
+  grid-template-columns: 205px minmax(640px, 860px) 205px;
+  gap: 32px;
+  align-items: start;
+  justify-content: center;
+  position: relative;
+}
+
+.previewCenter {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Soft Amber Atmospheric Glow behind Product Preview */
+.amberAtmosphereGlow {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  right: 10%;
+  height: 70%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(229, 139, 67, 0.16) 0%,
+    rgba(229, 139, 67, 0.04) 50%,
+    transparent 75%
+  );
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.previewGridBackdrop {
+  position: absolute;
+  inset: -32px -40px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+/* Preview Window Container */
+.previewContainer {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  border-radius: 12px;
+  border: 1px solid rgba(229, 139, 67, 0.28);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  background-color: #0b0e14;
+  overflow: hidden;
+  box-shadow:
+    0 24px 64px -16px rgba(0, 0, 0, 0.85),
+    0 0 28px -4px rgba(229, 139, 67, 0.12);
+}
+
+/* Window Topbar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 0 14px;
+  background-color: #0f131c;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.topbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.topbarDots {
+  display: flex;
+  gap: 6px;
+}
+
+.topbarDot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.dotRed {
+  background-color: #ef4444;
+}
+
+.dotYellow {
+  background-color: #f59e0b;
+}
+
+.dotGreen {
+  background-color: #10b981;
+}
+
+.topbarBrand {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.topbarBrandAccent {
+  color: var(--color-accent);
+}
+
+.topbarBreadcrumb {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumbBranch {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+.breadcrumbSlash {
+  color: #475569;
+}
+
+.breadcrumbRepo,
+.breadcrumbBranchName {
+  color: #94a3b8;
+}
+
+.topbarRight {
+  display: flex;
+  align-items: center;
+}
+
+/* Internal 7-Step Product Progress Bar */
+.internalProgressTrack {
+  background: #090c12;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 7px 16px;
+  overflow-x: auto;
+  transition: all 250ms ease;
+}
+
+.internalProgressSteps {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 600px;
+}
+
+.internalStepItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #475569;
+}
+
+.internalStepDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #334155;
+}
+
+.internalStepText {
+  letter-spacing: 0.02em;
+}
+
+.internalStepDivider {
+  color: #334155;
+  font-size: 9px;
+  margin-left: 4px;
+}
+
+.internalStepActive {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.internalStepActive .internalStepDot {
+  background-color: var(--color-accent);
+  box-shadow: 0 0 6px var(--color-accent);
+}
+
+.internalStepComplete {
+  color: #10b981;
+}
+
+.internalStepComplete .internalStepDot {
+  background-color: #10b981;
+}
+
+/* Workspace Body */
+.previewBody {
+  display: flex;
+  min-height: 330px;
+}
+
+.sidebar {
+  width: 40px;
+  flex-shrink: 0;
+  background-color: #0d1017;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 0;
+  gap: 8px;
+}
+
+.sidebarIcon {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  font-size: 11px;
+  color: #64748b;
+  cursor: default;
+}
+
+.sidebarActive {
+  background-color: rgba(229, 139, 67, 0.12);
+  color: var(--color-accent);
+}
+
+.mainContent {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.taskHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.01);
+}
+
+.taskTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.taskIssue {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: rgba(229, 139, 67, 0.12);
+  border: 1px solid rgba(229, 139, 67, 0.25);
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.taskModule {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #64748b;
+}
+
+.activityArea {
+  flex: 1;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 250ms ease;
+}
+
+.phaseLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.phaseLabelTag {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: var(--color-accent);
+  background: rgba(229, 139, 67, 0.1);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.phaseLabelText {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+/* File Tree in Preview */
+.treeViewBox {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  transition: all 250ms ease;
+}
+
+.treeViewHeader {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 3px;
+}
+
+.treeFiles {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.treeLine {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #94a3b8;
+  padding: 1.5px 0;
+}
+
+.treeLineHighlighted {
+  color: #f1f5f9;
+}
+
+.treeLineHighlighted .treeName {
+  color: #38bdf8;
+  font-weight: 600;
+}
+
+.treeTag {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: rgba(229, 139, 67, 0.15);
+  border-radius: 3px;
+  padding: 1px 5px;
+  margin-left: 6px;
+}
+
+/* Plan Box */
+.planBox {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.planHeader {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #64748b;
+  margin-bottom: 3px;
+}
+
+.planList {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  color: #cbd5e1;
+}
+
+.planItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.planBullet {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+/* Diff Box */
+.diffBox {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  background: #06080c;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+
+.diffTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 3px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  color: #64748b;
+}
+
+.diffStat {
+  color: #10b981;
+}
+
+.diffDel {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.08);
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: flex;
+  gap: 6px;
+}
+
+.diffAdd {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.08);
+  padding: 2px 6px;
+  border-radius: 3px;
+  display: flex;
+  gap: 6px;
+}
+
+.diffSign {
+  font-weight: 700;
+  user-select: none;
+}
+
+/* Verify Box */
+.verifyBox {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px 10px;
+  background: rgba(16, 185, 129, 0.04);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.verifyHeader {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #64748b;
+}
+
+.verifyGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.verifyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.verifyCheck {
+  color: #10b981;
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.verifyLabel {
+  color: #cbd5e1;
+}
+
+.verifyStatus {
+  color: #10b981;
+  font-weight: 600;
+  font-size: 10px;
+}
+
+.verifiedProofPill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 6px;
+  color: #10b981;
+  margin-top: 4px;
+  box-shadow: 0 0 16px -2px rgba(16, 185, 129, 0.2);
+}
+
+.verifiedDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+.verifiedText {
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.verifiedMeta {
+  color: #6ee7b7;
+  font-size: 10px;
+}
+
+/* Activity Lines */
+.activityLines {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 4px;
+}
+
+.activityLine {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.45;
+  color: #94a3b8;
+}
+
+.activityHighlight {
+  color: #f1f5f9;
+}
+
+.lineIcon {
+  font-size: 10px;
+  width: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.check {
+  color: #10b981;
+}
+
+.arrow {
+  color: var(--color-accent);
+}
+
+.diamond {
+  color: #64748b;
+}
+
+.lineText {
+  flex: 1;
+}
+
+.lineMeta {
+  color: #64748b;
+  font-size: 10px;
+  margin-left: auto;
+}
+
+/* Subdued Telemetry Sidebar */
+.agentPanel {
+  width: 150px;
+  flex-shrink: 0;
+  background-color: #0c0f16;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.agentPanelTitle {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #475569;
+}
+
+.agentEntries {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.agentEntry {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 10.5px;
+}
+
+.agentEntryLabel {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: #475569;
+}
+
+.agentEntryValue {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.agentHighlight {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* Terminal */
+.terminal {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: #06080d;
+  padding: 10px 16px;
+  min-height: 80px;
+  transition: all 250ms ease;
+}
+
+.terminalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 5px;
+}
+
+.terminalTitle {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.terminalStatus {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #475569;
+}
+
+.terminalLines {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.terminalLine {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.command {
+  color: #f1f5f9;
+}
+
+.output {
+  color: #94a3b8;
+}
+
+.success {
+  color: #10b981;
+}
+
+.muted {
+  color: #475569;
+}
+
+/* Subtle Target Highlights on Callout Hover */
+.targetHighlight {
+  outline: 1px solid rgba(229, 139, 67, 0.45) !important;
+  background-color: rgba(229, 139, 67, 0.04) !important;
+  box-shadow: inset 0 0 16px rgba(229, 139, 67, 0.08) !important;
+}
+
+/* ============================================================
+   4. EDITORIAL CALLOUTS & SUBTLE CONNECTOR ARROWS
+   ============================================================ */
+
+.calloutsColumnLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 3.5rem;
+  padding-top: 14px;
+  z-index: 2;
+  position: relative;
+}
+
+.calloutsColumnRight {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 5rem;
+  padding-top: 104px;
+  z-index: 2;
+  position: relative;
+}
+
+.calloutCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px 13px;
+  border-radius: 8px;
+  background: rgba(12, 16, 23, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 250ms ease;
+  cursor: default;
+  outline: none;
+}
+
+.calloutCard:hover,
+.calloutCard:focus-visible {
+  border-color: rgba(229, 139, 67, 0.35);
+  background: rgba(16, 20, 30, 0.85);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5);
+}
+
+.calloutEyebrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calloutDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  box-shadow: 0 0 6px rgba(229, 139, 67, 0.8);
+  flex-shrink: 0;
+}
+
+.calloutTitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f1f5f9;
+}
+
+.calloutDesc {
+  font-size: 11px;
+  line-height: 1.45;
+  color: #94a3b8;
+  margin: 0;
+}
+
+/* --- Left Callouts Connector Arrow (Pointing Right -> Preview) --- */
+
+.connectorLineRight {
+  position: absolute;
+  right: -32px;
+  top: 50%;
+  width: 32px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(229, 139, 67, 0.65) 100%
+  );
+  pointer-events: none;
+  opacity: 0.5;
+  transform-origin: left center;
+  animation: revealConnectorRight 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: opacity 250ms ease, background 250ms ease;
+}
+
+/* Subtle dogleg notch at start of line */
+.connectorLineRight::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -5px;
+  width: 5px;
+  height: 6px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom-left-radius: 2px;
+}
+
+.arrowRight {
+  position: absolute;
+  right: 0;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
+  border-top: 1.5px solid var(--color-accent);
+  border-right: 1.5px solid var(--color-accent);
+  transform: rotate(45deg);
+  transition: all 250ms ease;
+}
+
+.calloutCard:hover .connectorLineRight,
+.calloutCard:focus-visible .connectorLineRight {
+  opacity: 0.95;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    var(--color-accent) 100%
+  );
+}
+
+.calloutCard:hover .arrowRight,
+.calloutCard:focus-visible .arrowRight {
+  filter: drop-shadow(0 0 4px rgba(229, 139, 67, 0.7));
+}
+
+/* --- Right Callouts Connector Arrow (Pointing Left -> Preview) --- */
+
+.connectorLineLeft {
+  position: absolute;
+  left: -32px;
+  top: 50%;
+  width: 32px;
+  height: 1px;
+  background: linear-gradient(
+    270deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(229, 139, 67, 0.65) 100%
+  );
+  pointer-events: none;
+  opacity: 0.5;
+  transform-origin: right center;
+  animation: revealConnectorLeft 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: opacity 250ms ease, background 250ms ease;
+}
+
+/* Subtle dogleg notch at start of line */
+.connectorLineLeft::before {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: -5px;
+  width: 5px;
+  height: 6px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom-right-radius: 2px;
+}
+
+.arrowLeft {
+  position: absolute;
+  left: 0;
+  top: -2.5px;
+  width: 5px;
+  height: 5px;
+  border-bottom: 1.5px solid var(--color-accent);
+  border-left: 1.5px solid var(--color-accent);
+  transform: rotate(45deg);
+  transition: all 250ms ease;
+}
+
+.calloutCard:hover .connectorLineLeft,
+.calloutCard:focus-visible .connectorLineLeft {
+  opacity: 0.95;
+  background: linear-gradient(
+    270deg,
+    rgba(255, 255, 255, 0.3) 0%,
+    var(--color-accent) 100%
+  );
+}
+
+.calloutCard:hover .arrowLeft,
+.calloutCard:focus-visible .arrowLeft {
+  filter: drop-shadow(0 0 4px rgba(229, 139, 67, 0.7));
+}
+
+@keyframes revealConnectorRight {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 0.5;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes revealConnectorLeft {
+  from {
+    opacity: 0;
+    transform: scaleX(0);
+  }
+  to {
+    opacity: 0.5;
+    transform: scaleX(1);
+  }
+}
+
+/* ============================================================
+   RESPONSIVE (1024, 768, 600 and below)
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  .headerBlock {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .agentReadyBadge {
+    align-items: flex-start;
+    text-align: left;
+    padding-top: 0;
+  }
+
+  .previewAreaWrap {
+    grid-template-columns: 180px minmax(500px, 1fr) 180px;
+    gap: 20px;
+  }
+
+  .connectorLineRight {
+    right: -20px;
+    width: 20px;
+  }
+
+  .connectorLineLeft {
+    left: -20px;
+    width: 20px;
+  }
+
+  .timelineRail {
+    top: 54px;
+  }
+
+  .stepNum {
+    margin-bottom: 12px;
+  }
+
+  .stepNode {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 16px;
+  }
+
+  .stepTitle {
+    font-size: 14.5px;
+    white-space: normal;
+  }
+
+  .stepDesc {
+    font-size: 11.5px;
+    max-width: 150px;
+  }
+}
+
+@media (max-width: 768px) {
+  .timelineRail {
+    display: none;
+  }
+
+  .stepperGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    width: 100%;
+    position: relative;
+    padding-left: 4px;
+  }
+
+  /* Vertical connector running behind the circular nodes */
+  .stepperGrid::before {
+    content: '';
+    position: absolute;
+    top: 36px;
+    bottom: 36px;
+    left: 40px;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.12);
+    z-index: 1;
+  }
+
+  .stepButton {
+    flex-direction: row;
+    align-items: center;
+    text-align: left;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .stepNum {
+    margin-bottom: 0;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  .stepNode {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+  }
+
+  .stepInfo {
+    align-items: flex-start;
+    text-align: left;
+    gap: 4px;
+  }
+
+  .stepTitle {
+    font-size: 15px;
+    white-space: normal;
+  }
+
+  .stepDesc {
+    max-width: 100%;
+    font-size: 12px;
+  }
+
+  /* Stack layout on mobile / narrow tablet */
+  .previewAreaWrap {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .calloutsColumnLeft,
+  .calloutsColumnRight {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding-top: 0;
+    width: 100%;
+  }
+
+  /* Connectors hide on mobile — callouts become clean inline annotations */
+  .connectorLineRight,
+  .connectorLineLeft {
+    display: none;
+  }
+
+  .agentPanel {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .calloutsColumnLeft,
+  .calloutsColumnRight {
+    grid-template-columns: 1fr;
+  }
+
+  .previewContainer {
+    border-radius: 8px;
+  }
+
+  .internalProgressSteps {
+    min-width: 520px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .timelineSignal {
+    display: none;
+  }
+
+  .stepPulseRing {
+    display: none;
+  }
+
+  .eyebrowDot,
+  .agentReadyPulse,
+  .calloutDot {
+    box-shadow: none;
+  }
+
+  .timelineProgress {
+    transition: none;
+  }
+
+  .stepNode {
+    transition: none;
+  }
+
+  .connectorLineRight,
+  .connectorLineLeft {
+    animation: none;
+    transform: none;
+    opacity: 0.5;
+  }
+}

@@ -1,0 +1,153 @@
+/* ============================================================
+   WORKSPACE TOPBAR
+   ============================================================ */
+
+.topbar {
+  height: 52px;
+  background-color: var(--color-surface-1);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-xl);
+  user-select: none;
+  z-index: 20;
+}
+
+.leftSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.repoBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: var(--text-code-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.repoBadge:hover {
+  border-color: var(--color-border-active);
+  background-color: var(--color-surface-hover);
+}
+
+.repoIcon {
+  color: var(--color-accent);
+}
+
+.repoDivider {
+  color: var(--color-text-muted);
+}
+
+.branchName {
+  color: var(--color-text-secondary);
+}
+
+.taskIndicator {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--text-code-sm);
+  color: var(--color-text-secondary);
+  border-left: 1px solid var(--color-border);
+  padding-left: var(--space-md);
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.taskTitle {
+  color: var(--color-text-primary);
+  font-weight: var(--weight-medium);
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.statusPill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.02em;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.statusReady {
+  background-color: rgba(56, 189, 248, 0.1);
+  color: var(--color-secondary);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+.statusReady .statusDot {
+  background-color: var(--color-secondary);
+}
+
+.statusRunning {
+  background-color: var(--color-accent-dim);
+  color: var(--color-accent);
+  border: 1px solid var(--color-accent-border);
+}
+.statusRunning .statusDot {
+  background-color: var(--color-accent);
+}
+
+.statusVerified {
+  background-color: var(--color-success-dim);
+  color: var(--color-success);
+  border: 1px solid var(--color-success-border);
+}
+.statusVerified .statusDot {
+  background-color: var(--color-success);
+}
+
+.profileButton {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: var(--color-surface-2);
+  border: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.profileButton:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-border-active);
+}
+
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 var(--gutter);
+  }
+  .taskIndicator {
+    display: none;
+  }
+}
